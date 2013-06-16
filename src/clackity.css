@@ -47,3 +47,28 @@
                   * ring.
                   */
 }
+
+/** BLACK COLOR SCHEME **/
+.clackity #editorsection {
+  background: #111;
+}
+.clackity {
+  background: #000;
+  color: #CCC;
+  border-color: #222;
+}
+.clackity s {
+  color: #666;
+}
+.clackity code {
+  background: rgba(255, 255, 255, 0.1);
+}
+.clackity code s {
+  color: #C0766E;
+}
+.clackity a {
+  color: #82ADB0;
+}
+.clackity a.referent {
+  opacity: 0.5;
+}
