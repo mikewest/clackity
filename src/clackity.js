@@ -6,20 +6,19 @@
  * @constructor
  */
 var Clackity = function(editorSelector) {
-  // Cache DOM references.
-  this.editor_ = document.querySelector(editorSelector);
-  this.wordcount_ = document.getElementById('wordcount');
-  this.charcount_ = document.getElementById('charcount');
+  // Grab the textarea, and replace it in the DOM with a nice, meaningless div.
+  this.textarea_ = document.querySelector(editorSelector);
+  this.editor_ = document.createElement('div');
+  this.editor_.classList.add('clackity');
+  this.textarea_.parentNode.replaceChild(this.editor_, this.textarea_);
 
   // Setup event listeners.
   this.editor_.addEventListener('keydown', this.preprocessKeystroke_.bind(this));
   this.editor_.addEventListener('keyup', this.setNeedsUpdate_.bind(this));
 
   // Kick things off by focusing on the editor and running a style update.
-  this.editor_.classList.add('clackity');
   this.editor_.focus();
   this.update();
-  this.timer_ = null;
 };
 
 Clackity.prototype = {
@@ -31,26 +30,11 @@ Clackity.prototype = {
    */
   editor_: null,
 
-  /**
-   * Cached reference to the editor's charcount element.
-   *
-   * @type {DOMElement}
-   * @private
-   */
-  charcount_: null,
-
-  /**
-   * Cached reference to the editor's wordcount element.
-   *
-   * @type {DOMElement}
-   * @private
-   */
-  wordcount_: null,
-
   onclose: function () {},
   onpersist: function () {},
 
   set value(text) {
+    this.textarea_.value = text;
     this.editor_.innerText = text;
     this.update();
   },
@@ -236,19 +220,5 @@ Clackity.prototype = {
     var selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
-  },
-
-  display: function () {
-    this.editor_.parentNode.classList.add('active');
-    this.timer_ = setInterval((function () {
-      this.onpersist(this.editor_.innerText);
-    }).bind(this), 5000);
-  },
-
-  hide: function () {
-    clearInterval(this.timer_);
-    this.editor_.blur();
-    this.editor_.parentNode.classList.remove('active');
-    this.onpersist(this.editor_.innerText);
   },
 }
